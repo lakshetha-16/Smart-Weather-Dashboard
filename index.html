@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Live weather, a 5-day forecast and smart travel suggestions for any city." />
+  <title>Smart Weather & Travel Dashboard</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛅</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body data-theme="clear-day">
+  <div class="bg-orbs" aria-hidden="true"><span></span><span></span><span></span></div>
+
+  <main class="app">
+    <header class="top">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v2M4.9 4.9l1.4 1.4M2 12h2M19.7 4.9l-1.4 1.4M22 12h-2"/><circle cx="12" cy="12" r="4"/><path d="M12 20h5a3 3 0 0 0 .4-5.97"/></svg>
+        </span>
+        <span class="brand-name">Smart Weather</span>
+      </div>
+      <h1>Where should you <em>go</em> today?</h1>
+      <p class="lead">Live conditions, a 5-day outlook and travel ideas tailored to the weather.</p>
+
+      <form id="search-form" class="search" role="search">
+        <label for="city-input" class="sr-only">City name</label>
+        <svg class="search-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="city-input" type="text" placeholder="Search a city, e.g. Chennai" autocomplete="off" required />
+        <button type="submit">Check weather</button>
+      </form>
+      <div id="recent" class="recent" aria-label="Recent searches"></div>
+    </header>
+
+    <p id="status" class="status" role="status" aria-live="polite">Search for a city to see its weather and travel ideas.</p>
+
+    <div id="skeleton" class="skeleton" hidden aria-hidden="true">
+      <div class="sk sk-hero"></div><div class="sk sk-side"></div><div class="sk sk-wide"></div>
+    </div>
+
+    <section id="dashboard" class="dashboard" hidden>
+      <article class="current card">
+        <div class="current-head">
+          <div>
+            <p class="eyebrow" id="date"></p>
+            <h2 id="place"></h2>
+          </div>
+          <span class="pill" id="local-time"></span>
+        </div>
+
+        <div class="current-main">
+          <div class="icon" id="current-icon" aria-hidden="true"></div>
+          <div>
+            <p class="temp"><span id="temp"></span><sup>°C</sup></p>
+            <p id="condition" class="condition"></p>
+            <p class="hilo" id="hilo"></p>
+          </div>
+        </div>
+
+        <dl class="stats">
+          <div class="stat">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>
+            <dt>Feels like</dt><dd id="feels"></dd>
+          </div>
+          <div class="stat">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.7s6 6.3 6 10.8a6 6 0 0 1-12 0c0-4.5 6-10.8 6-10.8z"/></svg>
+            <dt>Humidity</dt><dd id="humidity"></dd>
+          </div>
+          <div class="stat">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.6 4.6A2 2 0 1 1 11 8H2M12.6 19.4A2 2 0 1 0 14 16H2M17.7 7.7A2.5 2.5 0 1 1 19.5 12H2"/></svg>
+            <dt>Wind</dt><dd id="wind"></dd>
+          </div>
+          <div class="stat">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 16.2A4.5 4.5 0 0 0 17.5 8h-1.8A7 7 0 1 0 4 14.9"/><path d="M8 19v2M12 18v3M16 19v2"/></svg>
+            <dt>Rain chance</dt><dd id="rain"></dd>
+          </div>
+        </dl>
+
+        <div class="sun">
+          <span>🌅 Sunrise <strong id="sunrise"></strong></span>
+          <span>🌇 Sunset <strong id="sunset"></strong></span>
+        </div>
+      </article>
+
+      <section class="travel card" aria-labelledby="travel-title">
+        <h3 id="travel-title">Travel planner</h3>
+
+        <div class="verdict">
+          <div class="score-ring" id="score-ring" role="img" aria-label="Travel score"><span id="score"></span></div>
+          <div>
+            <p class="verdict-label" id="verdict"></p>
+            <p class="verdict-text" id="verdict-text"></p>
+          </div>
+        </div>
+
+        <div class="quick">
+          <div><span>🕒 Best time today</span><strong id="best-time"></strong></div>
+          <div><span>📅 Best day this week</span><strong id="best-day"></strong></div>
+        </div>
+
+        <h4>Things to do</h4>
+        <ul id="travel-list" class="activities"></ul>
+
+        <h4>Pack smart</h4>
+        <ul id="pack-list" class="pack"></ul>
+
+        <p class="safety" id="safety"></p>
+      </section>
+
+      <section class="forecast card" aria-labelledby="forecast-title">
+        <h3 id="forecast-title">5-day forecast</h3>
+        <ul id="forecast-list"></ul>
+      </section>
+    </section>
+  </main>
+
+  <footer class="foot">
+    Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a>
+  </footer>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
